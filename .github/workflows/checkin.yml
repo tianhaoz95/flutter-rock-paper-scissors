@@ -17,7 +17,11 @@ jobs:
       - uses: subosito/flutter-action@v1
         with:
           flutter-version: '1.9.1+hotfix.2'
-          channel: 'master'
+          channel: 'stable'
+      - name: Upgrade flutter
+        run: |
+          flutter channel master
+          flutter upgrade
       - name: Install packages
         run: |
           cd ./rock_paper_scissors
@@ -41,7 +45,11 @@ jobs:
       - uses: subosito/flutter-action@v1
         with:
           flutter-version: '1.9.1+hotfix.4'
-          channel: 'master'
+          channel: 'stable'
+      - name: Upgrade flutter
+        run: |
+          flutter channel master
+          flutter upgrade
       - name: Build apk package
         run: |
           cd ./rock_paper_scissors
@@ -57,9 +65,11 @@ jobs:
       - uses: subosito/flutter-action@v1
         with:
           flutter-version: '1.9.1+hotfix.4'
-          channel: 'master'
+          channel: 'stable'
       - name: Upgrade flutter
-        run: flutter channel master && flutter upgrade
+        run: |
+          flutter channel master
+          flutter upgrade
       - name: build iOS package
         run: |
           cd ./rock_paper_scissors
