@@ -1,0 +1,66 @@
+name: Checkin
+
+on: [push, pull_request]
+
+jobs:
+  lint-and-test:
+    name: Test on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macOS-latest]
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-java@v1
+        with:
+          java-version: '12.x'
+      - uses: subosito/flutter-action@v1
+        with:
+          flutter-version: '1.9.1+hotfix.2'
+          channel: 'master'
+      - name: Install packages
+        run: |
+          cd ./rock_paper_scissors
+          flutter pub get
+      - name: Lint
+        run: |
+          cd ./rock_paper_scissors
+          flutter analyze
+      - name: Unit test
+        run: |
+          cd ./rock_paper_scissors
+          flutter test
+  build-Android:
+    name: Build Android apk
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-java@v1
+        with:
+          java-version: '12.x'
+      - uses: subosito/flutter-action@v1
+        with:
+          flutter-version: '1.9.1+hotfix.4'
+          channel: 'master'
+      - name: Build apk package
+        run: |
+          cd ./rock_paper_scissors
+          flutter build apk --release
+  build-iOS:
+    name: Build iOS package
+    runs-on: macOS-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-java@v1
+        with:
+          java-version: '12.x'
+      - uses: subosito/flutter-action@v1
+        with:
+          flutter-version: '1.9.1+hotfix.4'
+          channel: 'master'
+      - name: Upgrade flutter
+        run: flutter channel master && flutter upgrade
+      - name: build iOS package
+        run: |
+          cd ./rock_paper_scissors
+          flutter build ios --release --no-codesign
